@@ -15,3 +15,11 @@ pnpm drizzle-kit push:pg
 ```bash
 pnpm drizzle-kit studio
 ```
+
+## NOTE TO SELF
+
+you cant use serial with update table in PG drop the tables and create them again
+
+```sql
+DROP TABLE <name>
+```
