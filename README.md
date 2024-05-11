@@ -1,7 +1,7 @@
 # Generate Schema
 
 ```bash
-pnpm drizzle-kit generate:pg
+ pnpm drizzle-kit generate:pg
 ```
 
 # Push Schema

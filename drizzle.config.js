@@ -5,6 +5,7 @@ export default {
   out: "./drizzle",
   driver: "pg",
   dbCredentials: {
-    connectionString: process.env.NEXT_PUBLIC_NEON_DATABASE_URL,
+    url: process.env.NEXT_PUBLIC_NEON_DATABASE_URL,
   },
+  dialect: "postgresql",
 };
