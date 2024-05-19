@@ -1,6 +1,11 @@
 "use client";
 import React, { useState } from "react";
-import { addUser, addTodo, getUser, getTodo } from "@/actions/todoActions";
+import {
+  addUser,
+  addTodo,
+  getUserByEmail,
+  getTodo,
+} from "@/actions/todoActions";
 
 const TodoApp = () => {
   const [userName, setUserName] = useState("");
@@ -9,7 +14,7 @@ const TodoApp = () => {
   const [todos, setTodos] = useState([]);
 
   const handleAddUser = async () => {
-    const user = await addUser(userName);
+    const user = await addUser(userName, "email", "image");
     console.log("user", user);
     setUserId(user[0].id);
     console.log("userId", userId);
@@ -74,6 +79,16 @@ const TodoApp = () => {
           </div>
         ))}
       </div>
+      {/* btn to get user by email */}
+      <button
+        className="bg-blue-500 text-white px-4 py-2 mt-2 rounded"
+        onClick={async () => {
+          const user = await getUserByEmail("image");
+          console.log("user", user);
+        }}
+      >
+        Get User By Email
+      </button>
     </div>
   );
 };
