@@ -1,96 +1,66 @@
 "use client";
-import React, { useState } from "react";
-import {
-  addUser,
-  addTodo,
-  getUserByEmail,
-  getTodo,
-} from "@/actions/todoActions";
+import AddTodo from "./components/add-todo";
+import TaskCard from "./components/task-card";
+import React from "react";
+import { useState, useEffect } from "react";
+import { getTodos, getUserByEmail } from "@/actions/todoActions";
 
-const TodoApp = () => {
-  const [userName, setUserName] = useState("");
-  const [todoText, setTodoText] = useState("");
-  const [userId, setUserId] = useState(5);
-  const [todos, setTodos] = useState([]);
+import { useSession } from "next-auth/react";
 
-  const handleAddUser = async () => {
-    const user = await addUser(userName, "email", "image");
-    console.log("user", user);
-    setUserId(user[0].id);
-    console.log("userId", userId);
+const page = () => {
+  const { data: session, status } = useSession();
+  const [isMounted, setIsMounted] = useState(false);
+  const [userData, setUserData] = useState({ userID: "", todos: [] });
+
+  const getTodo = async () => {
+    if (!userData.userID) return;
+    const data = await getTodos(userData.userID);
+    setUserData((prevData) => ({ ...prevData, todos: data }));
   };
 
-  const handleAddTodo = async () => {
-    await addTodo(userId, todoText);
-    const userTodos = await getTodo(userId);
-    setTodos(userTodos);
-  };
+  useEffect(() => {
+    if (session) {
+      const cachedEmail = localStorage.getItem("userEmail");
+      const cachedUserID = localStorage.getItem("userID");
+
+      if (cachedEmail === session.user.email && cachedUserID) {
+        setUserData({ userID: cachedUserID, todos: [] });
+      } else {
+        getUserByEmail(session.user.email).then((data) => {
+          const newUserID = data[0].id;
+          setUserData({ userID: newUserID, todos: [] });
+          localStorage.setItem("userEmail", session.user.email);
+          localStorage.setItem("userID", newUserID);
+        });
+      }
+    }
+  }, [session]);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (userData.userID) {
+      getTodo();
+    }
+  }, [userData.userID, isMounted]);
+
+  if (status === "loading") {
+    return <div>Loading...</div>;
+  }
 
   return (
-    <div className="p-4">
-      <div className="mb-4">
-        <input
-          className="border-2 border-gray-300 text-black p-2 w-full"
-          value={userName}
-          onChange={(e) => setUserName(e.target.value)}
-          placeholder="Enter user name"
-        />
-        <button
-          className="bg-blue-500 text-white px-4 py-2 mt-2 rounded"
-          onClick={handleAddUser}
-        >
-          Add User
-        </button>
-      </div>
-      <div className="mb-4">
-        <input
-          className="border-2 border-gray-300 p-2 text-black w-full"
-          value={todoText}
-          onChange={(e) => setTodoText(e.target.value)}
-          placeholder="Enter todo text"
-        />
-        <button
-          className="bg-blue-500 text-white px-4 py-2 mt-2 rounded"
-          onClick={handleAddTodo}
-        >
-          Add Todo
-        </button>
-        {/* fetch todo */}
-        <button
-          className="bg-blue-500 text-white px-4 py-2 mt-2 rounded"
-          onClick={async () => {
-            const userTodos = await getTodo(userId);
-            setTodos(userTodos);
-          }}
-        >
-          Fetch Todos
-        </button>
-      </div>
-      <div>
-        {/* USER ID */}
-        {userId && <div className="mb-4 text-green-900">User ID: {userId}</div>}
-        {/* USER TODOS */}
-        {todos.map((todo) => (
-          <div
-            key={todo.id}
-            className="border-2 border-gray-300 text-black p-2 mb-2"
-          >
-            {todo.text}
-          </div>
+    <div className="w-full h-full px-6 py-2 flex flex-col gap-4">
+      <p>{userData.userID}</p>
+      <AddTodo userID={userData.userID} getTodo={getTodo} />
+      <ul className="w-full flex-wrap flex gap-4">
+        {userData.todos.map((task) => (
+          <TaskCard key={task.id} task={task} getTodo={getTodo} />
         ))}
-      </div>
-      {/* btn to get user by email */}
-      <button
-        className="bg-blue-500 text-white px-4 py-2 mt-2 rounded"
-        onClick={async () => {
-          const user = await getUserByEmail("image");
-          console.log("user", user);
-        }}
-      >
-        Get User By Email
-      </button>
+      </ul>
     </div>
   );
 };
 
-export default TodoApp;
+export default page;

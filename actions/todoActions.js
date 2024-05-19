@@ -42,16 +42,33 @@ export const getUserByEmail = async (email) => {
 };
 
 //  create todo
-export const addTodo = async (author_id, text) => {
-  await db.insert(todo).values({
-    authorId: author_id,
-    text: text,
-    done: false,
-  });
+export const addTodo = async (userID, text) => {
+  const data = await db
+    .insert(todo)
+    .values({
+      text: text,
+      authorId: userID,
+    })
+    .returning();
+  return data;
 };
 
 //  get todo by user
-export const getTodo = async (author_id) => {
+export const getTodos = async (author_id) => {
   const data = await db.select().from(todo).where(eq(todo.authorId, author_id));
+  return data;
+};
+
+export const updateTodo = async (id, done) => {
+  const data = await db
+    .update(todo)
+    .set({ done: done })
+    .where(eq(todo.id, id))
+    .returning();
+  return data;
+};
+
+export const deleteTodo = async (id) => {
+  const data = await db.delete(todo).where(eq(todo.id, id)).returning();
   return data;
 };
