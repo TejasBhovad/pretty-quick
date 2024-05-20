@@ -4,17 +4,20 @@ import TaskCard from "./components/task-card";
 import React from "react";
 import { useState, useEffect } from "react";
 import { getTodos, getUserByEmail } from "@/actions/todoActions";
-
 import { useSession } from "next-auth/react";
 
-const page = () => {
+const Page = () => {
   const { data: session, status } = useSession();
   const [isMounted, setIsMounted] = useState(false);
   const [userData, setUserData] = useState({ userID: "", todos: [] });
+  const [responseTime, setResponseTime] = useState(null);
 
   const getTodo = async () => {
     if (!userData.userID) return;
+    const startTime = performance.now();
     const data = await getTodos(userData.userID);
+    const endTime = performance.now();
+    setResponseTime(endTime - startTime);
     setUserData((prevData) => ({ ...prevData, todos: data }));
   };
 
@@ -26,7 +29,10 @@ const page = () => {
       if (cachedEmail === session.user.email && cachedUserID) {
         setUserData({ userID: cachedUserID, todos: [] });
       } else {
+        const startTime = performance.now();
         getUserByEmail(session.user.email).then((data) => {
+          const endTime = performance.now();
+          setResponseTime(endTime - startTime);
           const newUserID = data[0].id;
           setUserData({ userID: newUserID, todos: [] });
           localStorage.setItem("userEmail", session.user.email);
@@ -46,6 +52,20 @@ const page = () => {
     }
   }, [userData.userID, isMounted]);
 
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        getTodo();
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, [getTodo]);
+
   if (status === "loading") {
     return <div>Loading...</div>;
   }
@@ -53,14 +73,21 @@ const page = () => {
   return (
     <div className="w-full h-full px-6 py-2 flex flex-col gap-4">
       <p>{userData.userID}</p>
+      <p>Response Time: {responseTime} ms</p>
       <AddTodo userID={userData.userID} getTodo={getTodo} />
       <ul className="w-full flex-wrap flex gap-4">
         {userData.todos.map((task) => (
-          <TaskCard key={task.id} task={task} getTodo={getTodo} />
+          <TaskCard
+            key={task.id}
+            task={task}
+            getTodo={getTodo}
+            userID={userData.userID}
+            setUserData={setUserData}
+          />
         ))}
       </ul>
     </div>
   );
 };
 
-export default page;
+export default Page;

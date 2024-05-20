@@ -1,7 +1,39 @@
 import React from "react";
 import Image from "next/image";
 import { deleteTodo, updateTodo } from "@/actions/todoActions";
-const TaskCard = ({ task: { id, text, done }, getTodo }) => {
+const TaskCard = ({
+  task: { id, text, done },
+  getTodo,
+  userID,
+  setUserData,
+}) => {
+  const handleUpdateTodo = async (id, done) => {
+    try {
+      setUserData((prevData) => ({
+        ...prevData,
+        todos: prevData.todos.map((todo) =>
+          todo.id === id ? { ...todo, done: done } : todo
+        ),
+      }));
+
+      const data = await updateTodo(userID, id, done);
+      console.log("Update data", data);
+    } catch (error) {
+      console.error("Error updating todo:", error);
+      // if error, revert back to previous state
+      getTodo();
+    }
+  };
+  const handleDeleteTodo = async (id) => {
+    try {
+      const data = await deleteTodo(id);
+      console.log("Delete data", data);
+      getTodo();
+    } catch (error) {
+      console.error("Error deleting todo:", error);
+    }
+  };
+
   return (
     <li className="w-fit h-fit bg-white text-black rounded-md px-4 py-2 flex gap-2 flex-col">
       <span className="font-semibold text-lg">{text}</span>
@@ -9,12 +41,8 @@ const TaskCard = ({ task: { id, text, done }, getTodo }) => {
         <button
           className={`${
             done ? "bg-green-500" : "bg-blue-500"
-          } text-white rounded-md  p-1`}
-          onClick={async () => {
-            const data = await updateTodo(id, !done);
-            console.log("data", data);
-            getTodo();
-          }}
+          } text-white rounded-md p-1`}
+          onClick={async () => handleUpdateTodo(id, !done)}
         >
           {done ? (
             <Image
@@ -30,11 +58,7 @@ const TaskCard = ({ task: { id, text, done }, getTodo }) => {
         </button>
         <button
           className="bg-red-500 text-white rounded-md px-2 py-1"
-          onClick={async () => {
-            const data = await deleteTodo(id);
-            console.log("data", data);
-            getTodo();
-          }}
+          onClick={async () => handleDeleteTodo(id)}
         >
           <Image
             src="/delete.svg"

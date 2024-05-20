@@ -59,15 +59,15 @@ export const getTodos = async (author_id) => {
   return data;
 };
 
-export const updateTodo = async (id, done) => {
+export const updateTodo = async (author_id, task_id, done) => {
   const data = await db
     .update(todo)
     .set({ done: done })
-    .where(eq(todo.id, id))
+    .where(eq(todo.authorId, author_id))
+    .where(eq(todo.id, task_id))
     .returning();
   return data;
 };
-
 export const deleteTodo = async (id) => {
   const data = await db.delete(todo).where(eq(todo.id, id)).returning();
   return data;
