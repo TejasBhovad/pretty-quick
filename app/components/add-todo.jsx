@@ -2,10 +2,13 @@ import React from "react";
 import { addTodo } from "@/actions/todoActions";
 const AddTodo = ({ userID, getTodo }) => {
   const [text, setText] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
   const handleAddTodo = async () => {
     if (text) {
+      setLoading(true);
       const data = await addTodo(userID, text);
       console.log("data", data);
+      setLoading(false);
       setText("");
       getTodo();
     }
@@ -21,8 +24,9 @@ const AddTodo = ({ userID, getTodo }) => {
         onChange={(e) => setText(e.target.value)}
       />
       <button
-        className="w-full bg-blue-500 text-white rounded-md px-2 py-1 mt-2"
+        className="w-full bg-blue-500 text-white rounded-md px-2 py-1 mt-2 disabled:bg-gray-300 disabled:cursor-not-allowed"
         onClick={handleAddTodo}
+        disabled={loading}
       >
         Add Todo
       </button>

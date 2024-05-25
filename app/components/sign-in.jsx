@@ -4,7 +4,7 @@ const SignIn = () => {
   return (
     <button
       onClick={() => signIn("google", { callbackUrl: "/" })}
-      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded"
+      className="bg-white hover:bg-blue-100 text-blue-500 font-semibold py-1 px-4 rounded"
     >
       Sign in
     </button>
