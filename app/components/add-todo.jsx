@@ -6,8 +6,11 @@ const AddTodo = ({ userID, getTodo }) => {
   const handleAddTodo = async () => {
     if (text) {
       setLoading(true);
+      const startTime = performance.now();
       const data = await addTodo(userID, text);
+      const endTime = performance.now();
       console.log("data", data);
+      console.log(`Time taken to add todo: ${endTime - startTime} ms`);
       setLoading(false);
       setText("");
       getTodo();

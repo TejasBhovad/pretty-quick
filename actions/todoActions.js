@@ -1,4 +1,7 @@
-"use server";
+export const runtime = "edge"; // 'nodejs' is the default
+// execute this function on iad1 or hnd1, based on the connecting client location
+export const preferredRegion = ["bom1", "hnd1"];
+
 import db from "@/db/index";
 import { users, todo } from "@/db/schema";
 

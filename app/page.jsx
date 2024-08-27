@@ -69,22 +69,35 @@ const Page = () => {
   if (status === "loading") {
     return <div>Loading...</div>;
   }
+  if (status === "unauthenticated") {
+    return (
+      <div className="w-full h-full flex items-center justify-center">
+        <div className="w-1/3 min-w-72 h-36 bg-white rounded-md flex items-center justify-center">
+          <span className="xl:text-2xl text-lg text-center font-medium text-black transition-all">
+            Please Sign in to use todo app
+          </span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full h-full px-6 py-2 flex flex-col gap-4">
       <p>{userData.userID}</p>
       <p>Response Time: {responseTime} ms</p>
       <AddTodo userID={userData.userID} getTodo={getTodo} />
-      <ul className="w-full flex-wrap flex gap-4">
-        {userData.todos.map((task) => (
-          <TaskCard
-            key={task.id}
-            task={task}
-            getTodo={getTodo}
-            userID={userData.userID}
-            setUserData={setUserData}
-          />
-        ))}
+      <ul className="w-full flex gap-4 h-full bg-white/10 rounded-md overflow-y-auto p-4 flex-col transition-all">
+        {userData.todos
+          .sort((a, b) => a.done - b.done) // Sort tasks: incomplete first, completed last
+          .map((task) => (
+            <TaskCard
+              key={task.id}
+              task={task}
+              getTodo={getTodo}
+              userID={userData.userID}
+              setUserData={setUserData}
+            />
+          ))}
       </ul>
     </div>
   );
