@@ -10,12 +10,12 @@ const Navbar = () => {
     <nav className="absolute h-12 w-full bg-blue-900 backdrop-blur-sm bg-opacity-50">
       <div className="flex justify-between items-center h-full px-4">
         <Link href="/">
-          <span className="text-white text-lg">Home</span>
+          <span className="text-white text-lg font-medium font-mono">Home</span>
         </Link>
         {status === "loading" && <span>Loading...</span>}
         {session && status === "authenticated" && (
           <>
-            <span>Welcome, {session.user.name}</span>
+            {/* <span>Welcome, {session.user.name}</span> */}
             <SignOut />
           </>
         )}

@@ -82,23 +82,29 @@ const Page = () => {
   }
 
   return (
-    <div className="w-full h-full px-6 py-2 flex flex-col gap-4">
-      <p>{userData.userID}</p>
-      <p>Response Time: {responseTime} ms</p>
-      <AddTodo userID={userData.userID} getTodo={getTodo} />
-      <ul className="w-full flex gap-4 h-full bg-white/10 rounded-md overflow-y-auto p-4 flex-col transition-all">
-        {userData.todos
-          .sort((a, b) => a.done - b.done) // Sort tasks: incomplete first, completed last
-          .map((task) => (
-            <TaskCard
-              key={task.id}
-              task={task}
-              getTodo={getTodo}
-              userID={userData.userID}
-              setUserData={setUserData}
-            />
-          ))}
-      </ul>
+    <div className="w-full h-full px-6 py-2 flex flex-col gap-4 items-center">
+      <div className="max-w-4xl w-full  h-full flex flex-col gap-4">
+        <section className="p-4 w-full flex gap-4 h-auto bg-white/10 rounded-md flex-col transition-all">
+          <p className="text-gray-400 bg-gray-800 px-2 py-1 rounded-md text-base w-fit">
+            Response Time:{" "}
+            <span className="font-medium text-red-400">{responseTime}</span> ms
+          </p>
+          <AddTodo userID={userData.userID} getTodo={getTodo} />
+        </section>
+        <ul className="w-full flex gap-4 h-3/4 bg-white/10 rounded-md overflow-y-auto p-4 flex-col transition-all">
+          {userData.todos
+            .sort((a, b) => a.done - b.done) // Sort tasks: incomplete first, completed last
+            .map((task) => (
+              <TaskCard
+                key={task.id}
+                task={task}
+                getTodo={getTodo}
+                userID={userData.userID}
+                setUserData={setUserData}
+              />
+            ))}
+        </ul>
+      </div>
     </div>
   );
 };

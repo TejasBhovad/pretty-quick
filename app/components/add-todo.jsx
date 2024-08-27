@@ -17,7 +17,7 @@ const AddTodo = ({ userID, getTodo }) => {
     }
   };
   return (
-    <div className="w-fit h-fit bg-white text-black rounded-md px-6 py-4 flex gap-2 flex-col">
+    <div className="sm:w-fit w-full h-fit bg-white text-black rounded-md px-6 py-4 flex gap-2 flex-col">
       <span className="font-semibold text-lg">Add Todo</span>
       <input
         className="w-full border border-gray-300 rounded-md px-2 py-1"

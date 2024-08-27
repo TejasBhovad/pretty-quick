@@ -42,7 +42,7 @@ const TaskCard = ({
   };
 
   return (
-    <li className="w-fit h-fit bg-white text-black rounded-md px-6 py-2 flex gap-2 flex-col">
+    <li className="w-full h-fit bg-white text-black rounded-md px-6 py-2 flex gap-2 flex-col">
       <span className="font-semibold text-lg">{text}</span>
       <div className="flex gap-2">
         <button
