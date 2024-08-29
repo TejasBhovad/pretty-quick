@@ -17,9 +17,6 @@ importers:
       drizzle-orm:
         specifier: ^0.30.10
         version: 0.30.10(@neondatabase/serverless@0.9.1)(@types/pg@8.6.6)(pg@8.11.5)(react@18.3.1)
-      mini-svg-data-uri:
-        specifier: ^1.4.4
-        version: 1.4.4
       next:
         specifier: 14.2.3
         version: 14.2.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -864,10 +861,6 @@ packages:
   micromatch@4.0.5:
     resolution: {integrity: sha512-DMy+ERcEW2q8Z2Po+WNXuw3c5YaUSFjAO5GsJqfEl7UjvtIuFKO6ZrKvcItdy98dwFI2N1tg3zNIdKaQT+aNdA==}
     engines: {node: '>=8.6'}
-
-  mini-svg-data-uri@1.4.4:
-    resolution: {integrity: sha512-r9deDe9p5FJUPZAk3A59wGH7Ii9YrjjWw0jmw/liSbHl2CHiyXj6FcDXDu2K3TjVAXqiJdaw3xxwlZZr9E6nHg==}
-    hasBin: true
 
   minimatch@5.1.6:
     resolution: {integrity: sha512-lKwV/1brpG6mBUFHtb7NUmtABCb2WZZmm2wNiOA5hAb8VdCS4B3dtMWyvcoViccwAW/COERjXLt0zP1zXUN26g==}
@@ -1891,8 +1884,6 @@ snapshots:
     dependencies:
       braces: 3.0.2
       picomatch: 2.3.1
-
-  mini-svg-data-uri@1.4.4: {}
 
   minimatch@5.1.6:
     dependencies:

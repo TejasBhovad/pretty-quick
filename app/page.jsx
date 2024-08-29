@@ -66,9 +66,6 @@ const Page = () => {
     };
   }, [getTodo]);
 
-  if (status === "loading") {
-    return <div>Loading...</div>;
-  }
   if (status === "unauthenticated") {
     return (
       <div className="w-full h-full flex items-center justify-center">

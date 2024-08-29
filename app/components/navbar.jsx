@@ -12,7 +12,14 @@ const Navbar = () => {
         <Link href="/">
           <span className="text-white text-lg font-medium font-mono">Home</span>
         </Link>
-        {status === "loading" && <span>Loading...</span>}
+        {status === "loading" && (
+          <button
+            className="bg-white hover:bg-blue-100 text-blue-500 font-semibold py-1 px-4 rounded text-sm sm:text-[16px] disabled:opacity-50 transition-colors"
+            disabled
+          >
+            loading
+          </button>
+        )}
         {session && status === "authenticated" && (
           <>
             {/* <span>Welcome, {session.user.name}</span> */}
